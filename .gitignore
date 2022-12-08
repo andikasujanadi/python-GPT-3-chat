@@ -2,4 +2,5 @@ venv/
 chats/
 __pycache__/
 openaiapikey.txt
+mymain.py
 *.json
