@@ -1,0 +1,5 @@
+venv/
+chats/
+__pycache__/
+openaiapikey.txt
+*.json
