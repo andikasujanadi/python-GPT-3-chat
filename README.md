@@ -26,15 +26,17 @@ open terminal inside your project folder and execute ```py main.py```
 
 ### parameter
 
-you can change the character that you play and the character should you expect the AI to be inside ```main.py```
+you can change the character you play and the character should you expect from AI to be, inside ```main.py``` file
 
-```user1``` is you and ```user2``` is the AI
+```user1``` is you, and ```user2``` is the AI
+
+```history``` is parameter to create your history conversation, you can write whatever you like!
 
 also you can change scenario and conversation style! more of that i expained at below
 
 ### add character
 
-create your character name and description inside ```chat/characters``` directory, you can take from example and name the file ```{{your-character-name}}.txt```
+create your character name and description inside ```chat/characters``` directory, you can take from example and name the file ```your-character-name.txt```
 
 ### customize scenario and conversation style
 
