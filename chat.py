@@ -4,7 +4,7 @@ def open_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as infile:
         return infile.read()
 
-openai.api_key = open_file('openaiapikey.txt')
+openai.api_key = open_file('openaiapikey.txt').strip()
 
 def gpt3_completion(prompt, 
     stop, 
