@@ -3,4 +3,5 @@ chats/
 __pycache__/
 openaiapikey.txt
 mymain.py
+test.py
 *.json
