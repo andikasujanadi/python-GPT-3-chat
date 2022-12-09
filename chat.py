@@ -92,7 +92,6 @@ def start_chat(user1, user2, scenario = '', style = '', history = '', cli = True
             response = gpt3_completion(prompt, stop=gpt3_stop)
             err = 'no error'
         except Exception as e:
-            print(e)
             if ('Please reduce your prompt' in str(e)):
                 err = 'max prompt'
                 conversation = cut_history(conversation, user1)
