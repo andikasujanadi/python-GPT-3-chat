@@ -63,19 +63,23 @@ def get_prompt(user1, user2, scenario = '', style = ''):
 
     return prompt_template
 
-def start_chat(user1, user2, scenario = '', style = '', history = ''):
+def start_chat(user1, user2, scenario = '', style = '', history = '', cli = True):
     conversation = list()
     gpt3_stop = [user1, user2]
     prompt_template = get_prompt(user1, user2, scenario, style)
     
     history_data = open_file(f'chats/history/{history}.txt', history)
     if exists(f'chats/history/{history}.txt'):
-        print(history_data)
+        if cli:
+            print(history_data)
         conversation = history_data.split('\n')
     else:
         with open(f'chats/history/{history}.txt', 'w') as f:
             pass
-
+    
+    err = 'no error'
+    response = ''
+    
     while True:
         user_input = input(f'\n{user1}: ')
         conversation.append(f'\n{user1}: {user_input}')
@@ -86,17 +90,32 @@ def start_chat(user1, user2, scenario = '', style = '', history = ''):
         
         try:
             response = gpt3_completion(prompt, stop=gpt3_stop)
+            err = 'no error'
         except Exception as e:
+            print(e)
             if ('Please reduce your prompt' in str(e)):
+                err = 'max prompt'
                 conversation = cut_history(conversation, user1)
                 text_block = ('\n'.join(conversation))
                 prompt = prompt_template.replace('<<BLOCK>>', text_block)
                 prompt = prompt + f'\n{user2}:'
-                response = gpt3_completion(prompt, stop=gpt3_stop)
+                try:
+                    response = gpt3_completion(prompt, stop=gpt3_stop)
+                    err = 'no error'
+                except:
+                    pass
+            elif ('Error communicating with OpenAI' in str(e)):
+                err = 'offline'
+                pass
             else:
                 pass
 
-        print(f'\n{user2}:', response)
-        conversation.append(f'\n{user2}: {response}')
-        with open(f'chats/history/{history}.txt', 'w') as f:
-            f.write('\n'.join(conversation))
+        if err in ['no error']:
+            if cli:
+                print(f'\n{user2}:', response)
+
+            conversation.append(f'\n{user2}: {response}')
+            with open(f'chats/history/{history}.txt', 'w') as f:
+                f.write('\n'.join(conversation))
+        else:
+            print(f'[[SYSTEM ERROR, ERROR CODE: {err}]]')
