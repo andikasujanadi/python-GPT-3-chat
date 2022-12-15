@@ -1,5 +1,5 @@
 from main import *
-from flask import Flask, send_file, Response, request, jsonify
+from flask import Flask, send_file, Response, request, jsonify, render_template
 import os
 
 app = Flask(__name__)
@@ -108,5 +108,9 @@ def route_delete_dir_item(dirname, name):
             'status':304,
             })
 
+@app.route('/chat', methods=['GET'])
+def route_chat():
+    return render_template('index.html')
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=999, debug=True)
+    app.run(host='0.0.0.0', port=2023, debug=True)
