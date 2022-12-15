@@ -63,12 +63,13 @@ def get_prompt(user1, user2, scenario = '', style = ''):
 
     return prompt_template
 
-def start_chat(user1, user2, scenario = '', style = '', history = '', cli = True):
+def start_chat(user1, user2, scenario = '', style = '', history = False, cli = True):
     conversation = list()
     gpt3_stop = [user1, user2]
     prompt_template = get_prompt(user1, user2, scenario, style)
     
-    history_data = open_file(f'chats/history/{history}.txt', history)
+    if history != False:
+        history_data = open_file(f'chats/history/{history}.txt', history)
     if exists(f'chats/history/{history}.txt'):
         if cli:
             print(history_data)
@@ -114,7 +115,8 @@ def start_chat(user1, user2, scenario = '', style = '', history = '', cli = True
                 print(f'\n{user2}:', response)
 
             conversation.append(f'\n{user2}: {response}')
-            with open(f'chats/history/{history}.txt', 'w') as f:
-                f.write('\n'.join(conversation))
+            if history != False:
+                with open(f'chats/history/{history}.txt', 'w') as f:
+                    f.write('\n'.join(conversation))
         else:
             print(f'[[SYSTEM ERROR, ERROR CODE: {err}]]')
