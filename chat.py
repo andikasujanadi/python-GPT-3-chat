@@ -45,7 +45,7 @@ def cut_history(history, user):
         point +=1
     return (history[-point:])
 
-def get_prompt(user1, user2, scenario = '', style = ''):
+def get_prompt(user1, user2, scenario, style, language):
     style = open_file(f'chats/styles/{style}.txt')
     scenario = open_file(f'chats/scenario/{scenario}.txt')
     now = datetime.datetime.now()
@@ -61,26 +61,27 @@ def get_prompt(user1, user2, scenario = '', style = ''):
     prompt_template = prompt_template.replace('<<SCENARIO>>', scenario)
     prompt_template = prompt_template.replace('<<STYLE>>', style)
     prompt_template = prompt_template.replace('<<DATE>>', today)
+    prompt_template = prompt_template.replace('<<LANGUAGE>>', language)
 
     prompt_template = prompt_template.replace('<<USER1>>', user1)
     prompt_template = prompt_template.replace('<<USER2>>', user2)
 
     return prompt_template
 
-def start_chat(user1, user2, scenario = '', style = '', history = False, cli = True):
+def start_chat(user1, user2, scenario = '', style = '', history = False, cli = True, language = 'english'):
     conversation = list()
     gpt3_stop = [user1, user2]
-    prompt_template = get_prompt(user1, user2, scenario, style)
+    prompt_template = get_prompt(user1, user2, scenario, style, language)
     
     if (history != False) or (history == ''):
         history_data = open_file(f'chats/history/{history}.txt', history)
-    if exists(f'chats/history/{history}.txt'):
-        if cli:
-            print(history_data)
-        conversation = history_data.split('\n')
-    else:
-        with open(f'chats/history/{history}.txt', 'w') as f:
-            pass
+        if exists(f'chats/history/{history}.txt'):
+            if cli:
+                print(history_data)
+            conversation = history_data.split('\n')
+        else:
+            with open(f'chats/history/{history}.txt', 'w') as f:
+                pass
     
     err = 'no error'
     response = ''

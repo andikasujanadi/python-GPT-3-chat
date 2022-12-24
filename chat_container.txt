@@ -1,4 +1,4 @@
-The following is a conversation between <<USER1>> and <<USER2>>.
+The following is a conversation between <<USER1>> and <<USER2>> with <<LANGUAGE>> language.
 <<USER1 PROFILE>>
 <<USER2 PROFILE>>
 <<SCENARIO>>
