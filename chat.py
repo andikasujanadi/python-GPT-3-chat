@@ -1,5 +1,6 @@
 import openai
 from os.path import exists
+import datetime
 
 def open_file(filepath, exception=''):
     try:
@@ -47,6 +48,8 @@ def cut_history(history, user):
 def get_prompt(user1, user2, scenario = '', style = ''):
     style = open_file(f'chats/styles/{style}.txt')
     scenario = open_file(f'chats/scenario/{scenario}.txt')
+    now = datetime.datetime.now()
+    today = now.strftime("today is %A, %d %B %Y")
 
     user1_desc = open_file(f'chats/characters/{user1}.txt')
     user2_desc = open_file(f'chats/characters/{user2}.txt')
@@ -56,7 +59,8 @@ def get_prompt(user1, user2, scenario = '', style = ''):
     prompt_template = prompt_template.replace('<<USER2 PROFILE>>', user2_desc)
     
     prompt_template = prompt_template.replace('<<SCENARIO>>', scenario)
-    prompt_template = prompt_template.replace('<<ROLEPLAY>>', style)
+    prompt_template = prompt_template.replace('<<STYLE>>', style)
+    prompt_template = prompt_template.replace('<<DATE>>', today)
 
     prompt_template = prompt_template.replace('<<USER1>>', user1)
     prompt_template = prompt_template.replace('<<USER2>>', user2)
@@ -68,7 +72,7 @@ def start_chat(user1, user2, scenario = '', style = '', history = False, cli = T
     gpt3_stop = [user1, user2]
     prompt_template = get_prompt(user1, user2, scenario, style)
     
-    if history != False:
+    if (history != False) or (history == ''):
         history_data = open_file(f'chats/history/{history}.txt', history)
     if exists(f'chats/history/{history}.txt'):
         if cli:
@@ -115,7 +119,7 @@ def start_chat(user1, user2, scenario = '', style = '', history = False, cli = T
                 print(f'\n{user2}:', response)
 
             conversation.append(f'\n{user2}: {response}')
-            if history != False:
+            if (history != False) or (history == ''):
                 with open(f'chats/history/{history}.txt', 'w') as f:
                     f.write('\n'.join(conversation))
         else:
