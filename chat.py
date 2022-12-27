@@ -73,7 +73,7 @@ def start_chat(user1, user2, scenario = '', style = '', history = False, cli = T
     gpt3_stop = [user1, user2]
     prompt_template = get_prompt(user1, user2, scenario, style, language)
     
-    if (history != False) or (history != ''):
+    if (history != False) and (history != ''):
         history_data = open_file(f'chats/history/{history}.txt', history)
         if exists(f'chats/history/{history}.txt'):
             if cli:
@@ -96,6 +96,8 @@ def start_chat(user1, user2, scenario = '', style = '', history = False, cli = T
         
         try:
             response = gpt3_completion(prompt, stop=gpt3_stop)
+            if language == 'indonesia':
+                response = id_informal(response)
             err = 'no error'
         except Exception as e:
             if ('Please reduce your prompt' in str(e)):
@@ -120,7 +122,7 @@ def start_chat(user1, user2, scenario = '', style = '', history = False, cli = T
                 print(f'\n{user2}:', response)
 
             conversation.append(f'\n{user2}: {response}')
-            if (history != False) or (history != ''):
+            if (history != False) and (history != ''):
                 with open(f'chats/history/{history}.txt', 'w') as f:
                     f.write('\n'.join(conversation))
         else:
